@@ -50,7 +50,8 @@ export class PostsController {
     postData: {
       title: string;
       description: string;
-      content?: string;
+      content: string;
+      createdAt: Date;
       authorEmail?: string;
     },
   ): Promise<PostModel | undefined> {
