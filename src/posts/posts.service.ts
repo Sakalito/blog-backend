@@ -1,39 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { Post, Prisma } from '@prisma/client';
+import type { Post, Prisma } from '@prisma/client';
 
-import { PrismaService } from 'src/shared/services/prisma/prisma.service';
+import { PrismaService } from 'src/shared/modules/prisma/prisma.service';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllPosts(params: {
+  async findAllPosts(params?: {
     skip?: number;
     take?: number;
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
-    // orderBy?: Prisma.PostWithRelationInput;
-  }): Promise<Post[] | undefined> {
-    const { skip, take, cursor, where } = params;
-    return this.prisma.post.findMany({
+    orderBy?: Prisma.PostOrderByWithRelationInput;
+  }): Promise<Post[]> {
+    if (!params) return await this.prisma.post.findMany();
+
+    const { skip, take, cursor, where, orderBy } = params;
+
+    return await this.prisma.post.findMany({
       skip,
       take,
       cursor,
       where,
-      // orderBy,
+      orderBy,
     });
   }
 
   async findOnePost(
     postWhereUniqueInput: Prisma.PostWhereUniqueInput,
   ): Promise<Post | null> {
-    return this.prisma.post.findUnique({ where: postWhereUniqueInput });
+    return await this.prisma.post.findUnique({
+      where: postWhereUniqueInput,
+    });
   }
 
   async createPost(
     user: Prisma.PostCreateInput,
   ): Promise<Post | undefined> {
-    return this.prisma.post.create({
+    return await this.prisma.post.create({
       data: user,
     });
   }
@@ -44,7 +49,7 @@ export class PostsService {
   }): Promise<Post> {
     const { where, data } = params;
 
-    return this.prisma.post.update({
+    return await this.prisma.post.update({
       data,
       where,
     });
@@ -53,7 +58,7 @@ export class PostsService {
   async deletePost(
     where: Prisma.PostWhereUniqueInput,
   ): Promise<Post | undefined> {
-    return this.prisma.post.delete({
+    return await this.prisma.post.delete({
       where,
     });
   }
