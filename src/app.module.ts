@@ -7,6 +7,12 @@ import { PostsModule } from './posts/posts.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { CreateController } from './create/create.controller';
+import { GetController } from './get/get.controller';
+import { PostsController } from './posts/posts.controller';
+import { DeleteController } from './delete/delete.controller';
+import { PatchController } from './patch/patch.controller';
+import { ReadController } from './read/read.controller';
 
 @Module({
   imports: [
@@ -15,7 +21,15 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     PrismaModule,
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    CreateController,
+    GetController,
+    PostsController,
+    DeleteController,
+    PatchController,
+    ReadController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}
