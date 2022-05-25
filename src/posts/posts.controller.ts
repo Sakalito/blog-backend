@@ -14,23 +14,23 @@ import { PostsService } from './posts.service';
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postService: PostsService) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Get(':id')
   async getPostById(@Param('id') id: string): Promise<PostModel | null> {
-    return await this.postService.findOnePost({ id });
+    return await this.postsService.findOnePost({ id });
   }
 
   @Get()
   async getAll(): Promise<PostModel[]> {
-    return await this.postService.findAllPosts();
+    return await this.postsService.findAllPosts();
   }
 
   @Get('filter/:searchString')
   async getFilteredPosts(
     @Param('searchString') searchString: string,
   ): Promise<PostModel[]> {
-    return await this.postService.findAllPosts({
+    return await this.postsService.findAllPosts({
       where: {
         OR: [
           {
@@ -57,7 +57,7 @@ export class PostsController {
   ): Promise<PostModel | undefined> {
     const { title, description, content } = postData;
 
-    return await this.postService.createPost({
+    return await this.postsService.createPost({
       title,
       description,
       content,
@@ -69,7 +69,7 @@ export class PostsController {
     @Param('id') id: string,
     @Body() dto: { title: string; description: string; content: string },
   ): Promise<PostModel> {
-    return await this.postService.updatePost({
+    return await this.postsService.updatePost({
       where: { id },
       data: {
         published: true,
@@ -84,6 +84,6 @@ export class PostsController {
   async deletePost(
     @Param('id') id: string,
   ): Promise<PostModel | undefined> {
-    return await this.postService.deletePost({ id });
+    return await this.postsService.deletePost({ id });
   }
 }
