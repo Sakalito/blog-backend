@@ -51,7 +51,7 @@ export class PostsController {
       title: string;
       description: string;
       content: string;
-      createdAt: Date;
+      createdAt?: Date;
       authorEmail?: string;
     },
   ): Promise<PostModel | undefined> {
@@ -65,10 +65,18 @@ export class PostsController {
   }
 
   @Patch('publish/:id')
-  async publishPost(@Param('id') id: string): Promise<PostModel> {
+  async publishPost(
+    @Param('id') id: string,
+    @Body() dto: { title: string; description: string; content: string },
+  ): Promise<PostModel> {
     return await this.postService.updatePost({
       where: { id },
-      data: { published: true },
+      data: {
+        published: true,
+        content: dto.content,
+        title: dto.title,
+        description: dto.description,
+      },
     });
   }
 
